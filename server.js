@@ -50,6 +50,11 @@ const Comment = connection.define('Comment',{
     the_comment:Sequelize.STRING    
 })
 
+
+const Project = connection.define('Project',{
+    title:Sequelize.STRING    
+})
+
 app.get('/allposts',(req,res)=>{
    
    Post.findAll({
@@ -98,14 +103,36 @@ Post.belongsTo(User, {as:'UserRef', foreignKey: 'userId' }); //puts foreignKey U
 
 Post.hasMany(Comment,{as:'All_Comments' }); //foreignKey =PostId in comment table
 
+
+
+//Creates a UserProjects table with IDs for ProjectId and UserId
+User.belongsToMany(Project, {as:'Tasks', through:'UserProjects' });
+Project.belongsToMany(User, {as:'Workers',through:'UserProjects'});
+
+
+
+
 //syncing and authenticate sequel
 connection
 .sync({
-   // logging:console.log,
-
     //force will drop a user table then recreate it
     //force:true
 })
+.then(()=>{
+    Project.create({
+       title:'project 1'
+    }).then((project)=>{
+        project.setWorkers([4,5]);
+    })
+})
+.then(()=>{
+    Project.create({
+       title:'project 2'
+    })
+})
+
+
+
 /**.then(()=>{
     User.bulkCreate(_USERS)
     .then(users => {
