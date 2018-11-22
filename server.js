@@ -96,7 +96,20 @@ app.get('/singlepost',(req,res)=>{
 
 
 
-
+ app.put('/addWorker',(req,res)=>{
+   
+    Project.findById(2).then((project)=>{
+        project.addWorkers(5);
+    })
+    .then( () =>{
+     res.send('User Added');
+    })
+  .catch(error =>{
+     console.log(error);
+     res.status(404).send(error);
+   })
+ 
+ })
 
 
 Post.belongsTo(User, {as:'UserRef', foreignKey: 'userId' }); //puts foreignKey UserId in Post table
@@ -118,18 +131,18 @@ connection
     //force will drop a user table then recreate it
     //force:true
 })
-.then(()=>{
-    Project.create({
-       title:'project 1'
-    }).then((project)=>{
-        project.setWorkers([4,5]);
-    })
-})
-.then(()=>{
-    Project.create({
-       title:'project 2'
-    })
-})
+// .then(()=>{
+//     Project.create({
+//        title:'project 1'
+//     }).then((project)=>{
+//         project.setWorkers([4,5]);
+//     })
+// })
+// .then(()=>{
+//     Project.create({
+//        title:'project 2'
+//     })
+// })
 
 
 
