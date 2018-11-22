@@ -1,10 +1,13 @@
 //create an instance of express and Sequelize
 const express= require('express');
 const Sequelize=require('sequelize');
+const Op = Sequelize.Op;
+const _USERS =require('./users.json');
+
 
 const app = express();
 const port=8001;
-const _USERS =require('./users.json');
+
 
 
 
@@ -42,7 +45,9 @@ app.get('/findall',(req,res)=>{
    
    User.findAll({
        where:{
-           name:'Destiny'
+           name:{
+               [Op.like]:'Mad%'
+           }
        }
    })
    .then(user =>{
