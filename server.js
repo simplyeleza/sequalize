@@ -22,7 +22,7 @@ define:{
 }
 });
 
-//creating the model
+//creating the user model
 const User = connection.define('User',{
 name:Sequelize.STRING,
 email:{
@@ -39,7 +39,20 @@ password: {
 }
 
 
-});
+})
+
+//creating the post model
+
+const Post =connection.define('Post',{
+    id:{
+        primaryKey:true,
+        type:Sequelize.UUID,
+        defaultValue:Sequelize.UUIDV4
+    },
+    title:Sequelize.STRING,
+    content:Sequelize.TEXT
+})
+
 
 
 app.get('/findall',(req,res)=>{
