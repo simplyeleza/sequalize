@@ -76,6 +76,22 @@ app.get('/findOne',(req,res)=>{
 })
 
 
+app.put('/update',(req,res)=>{
+    User.update({
+        name:'Michal Power',
+        password:'password'
+    },{ where:{id:55}})
+    .then(rows =>{
+       res.json(rows);
+   })
+   .catch(error =>{
+       console.log(error);
+       res.status(404).send(error);
+   })
+   
+   })
+
+
 
 app.post('/post',(req,res)=>{
 
