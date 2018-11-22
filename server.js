@@ -40,7 +40,11 @@ password: {
 
 app.get('/findall',(req,res)=>{
    
-   User.findAll()
+   User.findAll({
+       where:{
+           name:'Destiny'
+       }
+   })
    .then(user =>{
     res.json(user);
    })
