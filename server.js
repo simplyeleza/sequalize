@@ -72,7 +72,7 @@ app.get('/allposts',(req,res)=>{
 })
 
 
-Post.belongsTo(User); //puts foreignKey UserId in Post table
+Post.belongsTo(User, {foreignKey: 'userId' }); //puts foreignKey UserId in Post table
 
 
 //syncing and authenticate sequel
@@ -81,17 +81,17 @@ connection
    // logging:console.log,
 
     //force will drop a user table then recreate it
-    //force:true
+    force:true
 })
-.then(()=>{
+/*.then(()=>{
   Post.create({
    UserId:1,
    title:'First Post',
    content:'post content 1'
   })
-})
+})*/
 //enter data into database using create method
-/* .then(()=>{
+.then(()=>{
     User.bulkCreate(_USERS)
     .then(users => {
        console.log("Success adding users");
@@ -99,7 +99,7 @@ connection
     .catch(error => {
         console.log(error);
     })
-}) */
+}) 
 .then(() => {
 console.log('Connection to database established successfully');
 })
