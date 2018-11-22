@@ -73,6 +73,8 @@ app.get('/singlepost',(req,res)=>{
         include:[{       
         model:Comment , as:'All_Comments',
         attributes:['the_comment']
+     },{
+      model:User , as: 'UserRef'   
      }]
     })
     .then(posts =>{
@@ -102,9 +104,9 @@ connection
    // logging:console.log,
 
     //force will drop a user table then recreate it
-    force:true
+    //force:true
 })
-.then(()=>{
+/**.then(()=>{
     User.bulkCreate(_USERS)
     .then(users => {
        console.log("Success adding users");
@@ -119,7 +121,7 @@ connection
    title:'First Post',
    content:'post content 1'
   })
-})
+})  **/
 
  
 .then(()=>{
