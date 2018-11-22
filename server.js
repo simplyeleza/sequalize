@@ -38,10 +38,31 @@ password: {
 
 });
 
-app.get('/',(req,res)=>{
+app.get('/findall',(req,res)=>{
+   
+   User.findAll()
+   .then(user =>{
+    res.json(user);
+   })
+ .catch(error =>{
+    console.log(error);
+    res.status(404).send(error);
+  })
+
+
+});
+
+
+
+
+
+app.post('/post',(req,res)=>{
+
+    const newUser =req.body.user;
+
     User.create({
-        name:'Jo',
-        bio:'kENYAN BOY'  
+        name:newUser.name,
+        email:newUser.email
       })
       .then(user =>{
           res.json(user);
@@ -63,7 +84,7 @@ connection
     //force:true
 })
 //enter data into database using create method
-.then(()=>{
+/* .then(()=>{
     User.bulkCreate(_USERS)
     .then(users => {
        console.log("Success adding users");
@@ -71,7 +92,7 @@ connection
     .catch(error => {
         console.log(error);
     })
-})
+}) */
 .then(() => {
 console.log('Connection to database established successfully');
 })
