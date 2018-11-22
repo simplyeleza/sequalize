@@ -4,6 +4,9 @@ const Sequelize=require('sequelize');
 
 const app = express();
 const port=8001;
+const _USERS =require('./users.json');
+
+
 
 //creating a connection with sequelize
 const connection = new Sequelize('db','user','pass',{
@@ -18,33 +21,20 @@ define:{
 
 //creating the model
 const User = connection.define('User',{
-    uuid:{
-      type:Sequelize.UUID,
-      primaryKey:true,
-      defaultValue:Sequelize.UUIDV4,
-      allowNull:false
-    },
-    first:Sequelize.STRING,
-    last:Sequelize.STRING,
-    full_name:Sequelize.STRING,  
-    bio: Sequelize.TEXT     
-   },{
- //when declaring options for freeze we have to declare them as third parameters as property on an object
-        hooks:{
-          beforeValidate:()=>{
-               console.log('before validate');
-          },
-          afterValidate:()=>{
-            console.log('after validate'); 
-          },
-          beforeCreate: (user) =>{
-             user.full_name ='${user.first} ${user.last}';
-             console.log('before create');
-          },
-          afterCreate:() => {
-            console.log('after create');
-          } 
-        }
+name:Sequelize.STRING,
+email:{
+    type:Sequelize.STRING,
+    validate:{
+        isEmail:true
+    }
+},
+password: {
+    type:Sequelize.STRING,
+    validate:{
+        isAlphanumeric:true
+    }
+}
+
 
 });
 
@@ -67,17 +57,19 @@ app.get('/',(req,res)=>{
 //syncing and authenticate sequel
 connection
 .sync({
-    logging:console.log,
+   // logging:console.log,
 
     //force will drop a user table then recreate it
-    force:true
+    //force:true
 })
 //enter data into database using create method
 .then(()=>{
-    User.create({
-        first:'Joe',
-        last:'Smith',
-        bio:'New Bio here'      
+    User.bulkCreate(_USERS)
+    .then(users => {
+       console.log("Success adding users");
+    })
+    .catch(error => {
+        console.log(error);
     })
 })
 .then(() => {
