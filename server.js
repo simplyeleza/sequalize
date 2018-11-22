@@ -16,10 +16,7 @@ const connection = new Sequelize('db','user','pass',{
 host:'localhost',
 dialect:'sqlite',
 storage:'db.sqlite',
-operatorsAliases:false,
-define:{
-    freezeTableName:true
-}
+operatorsAliases:false
 });
 
 //creating the user model
@@ -43,17 +40,15 @@ password: {
 
 //creating the Post model
 
-const Post =connection.define('Post',{
-    id:{
-        primaryKey:true,
-        type:Sequelize.UUID,
-        defaultValue:Sequelize.UUIDV4
-    },
+const Post = connection.define('Post',{
     title:Sequelize.STRING,
     content:Sequelize.TEXT
 })
 
-
+//creating the Comment model
+const Comment = connection.define('Comment',{
+    the_comment:Sequelize.STRING    
+})
 
 app.get('/allposts',(req,res)=>{
    
@@ -70,12 +65,36 @@ app.get('/allposts',(req,res)=>{
     res.status(404).send(error);
   })
 
-
 })
+
+app.get('/singlepost',(req,res)=>{
+   
+    Post.findById('1',{
+        include:[{       
+        model:Comment , as:'All_Comments',
+        attributes:['the_comment']
+     }]
+    })
+    .then(posts =>{
+     res.json(posts);
+    })
+  .catch(error =>{
+     console.log(error);
+     res.status(404).send(error);
+   })
+ 
+ 
+ })
+
+
+
+
+
 
 
 Post.belongsTo(User, {as:'UserRef', foreignKey: 'userId' }); //puts foreignKey UserId in Post table
 
+Post.hasMany(Comment,{as:'All_Comments' }); //foreignKey =PostId in comment table
 
 //syncing and authenticate sequel
 connection
@@ -101,6 +120,39 @@ connection
    content:'post content 1'
   })
 })
+
+ 
+.then(()=>{
+    Post.create({
+     userId:1,
+     title:'Second Post',
+     content:'post content 2'
+    })
+  })
+
+   
+.then(()=>{
+    Post.create({
+     userId:2,
+     title:'Third Post',
+     content:'post content 3'
+    })
+  })
+
+  .then(()=>{
+    Comment.create({
+     PostId:1,
+     the_comment:'First comment'
+    })
+  })
+
+   
+.then(()=>{
+    Comment.create({
+     PostId:1,
+     the_comment:'second comment here'
+    })
+  })
 //enter data into database using create method
 
 .then(() => {
