@@ -38,14 +38,11 @@ password: {
 
 });
 
-app.post('/post',(req,res)=>{
-    
-    const newUser =req.body.user;
-    
+app.get('/',(req,res)=>{
     User.create({
-      name:newUser.name,
-      email:newUser.email
-    })
+        name:'Jo',
+        bio:'kENYAN BOY'  
+      })
       .then(user =>{
           res.json(user);
       })
