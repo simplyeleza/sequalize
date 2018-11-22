@@ -41,13 +41,15 @@ password: {
 
 });
 
+
 app.get('/findall',(req,res)=>{
    
    User.findAll({
        where:{
            name:{
                [Op.like]:'Mad%'
-           }
+           },
+           id:98
        }
    })
    .then(user =>{
@@ -59,9 +61,19 @@ app.get('/findall',(req,res)=>{
   })
 
 
-});
+})
 
+app.get('/findOne',(req,res)=>{
+ User.findById('55')
+ .then(user =>{
+    res.json(user);
+})
+.catch(error =>{
+    console.log(error);
+    res.status(404).send(error);
+})
 
+})
 
 
 
