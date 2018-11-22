@@ -41,7 +41,7 @@ password: {
 
 })
 
-//creating the post model
+//creating the Post model
 
 const Post =connection.define('Post',{
     id:{
@@ -55,18 +55,13 @@ const Post =connection.define('Post',{
 
 
 
-app.get('/findall',(req,res)=>{
+app.get('/allposts',(req,res)=>{
    
-   User.findAll({
-       where:{
-           name:{
-               [Op.like]:'Mad%'
-           },
-           id:98
-       }
+   Post.findAll({
+       include:[User]
    })
-   .then(user =>{
-    res.json(user);
+   .then(posts =>{
+    res.json(posts);
    })
  .catch(error =>{
     console.log(error);
@@ -77,6 +72,9 @@ app.get('/findall',(req,res)=>{
 })
 
 
+Post.belongsTo(User); //puts foreignKey UserId in Post table
+
+
 //syncing and authenticate sequel
 connection
 .sync({
@@ -84,6 +82,13 @@ connection
 
     //force will drop a user table then recreate it
     //force:true
+})
+.then(()=>{
+  Post.create({
+   UserId:1,
+   title:'First Post',
+   content:'post content 1'
+  })
 })
 //enter data into database using create method
 /* .then(()=>{
