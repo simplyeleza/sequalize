@@ -58,7 +58,9 @@ const Post =connection.define('Post',{
 app.get('/allposts',(req,res)=>{
    
    Post.findAll({
-       include:[User]
+       include:[{       
+       model:User , as:'UserRef'
+    }]
    })
    .then(posts =>{
     res.json(posts);
@@ -72,7 +74,7 @@ app.get('/allposts',(req,res)=>{
 })
 
 
-Post.belongsTo(User, {foreignKey: 'userId' }); //puts foreignKey UserId in Post table
+Post.belongsTo(User, {as:'UserRef', foreignKey: 'userId' }); //puts foreignKey UserId in Post table
 
 
 //syncing and authenticate sequel
@@ -83,14 +85,6 @@ connection
     //force will drop a user table then recreate it
     force:true
 })
-/*.then(()=>{
-  Post.create({
-   UserId:1,
-   title:'First Post',
-   content:'post content 1'
-  })
-})*/
-//enter data into database using create method
 .then(()=>{
     User.bulkCreate(_USERS)
     .then(users => {
@@ -100,6 +94,15 @@ connection
         console.log(error);
     })
 }) 
+.then(()=>{
+  Post.create({
+   userId:1,
+   title:'First Post',
+   content:'post content 1'
+  })
+})
+//enter data into database using create method
+
 .then(() => {
 console.log('Connection to database established successfully');
 })
