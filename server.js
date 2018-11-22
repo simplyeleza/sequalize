@@ -63,69 +63,6 @@ app.get('/findall',(req,res)=>{
 
 })
 
-app.get('/findOne',(req,res)=>{
- User.findById('55')
- .then(user =>{
-    res.json(user);
-})
-.catch(error =>{
-    console.log(error);
-    res.status(404).send(error);
-})
-
-})
-
-
-app.delete('/remove',(req,res)=>{
-    User.destroy({
-       where: { id: 50} 
-    })
-    .then(() =>{
-       res.send('User successfully deleted');
-   })
-   .catch(error =>{
-       console.log(error);
-       res.status(404).send(error);
-   })
-   
-   })
-
-
-app.put('/update',(req,res)=>{
-    User.update({
-        name:'Michal Power',
-        password:'password'
-    },{ where:{id:55}})
-    .then(rows =>{
-       res.json(rows);
-   })
-   .catch(error =>{
-       console.log(error);
-       res.status(404).send(error);
-   })
-   
-   })
-
-
-
-app.post('/post',(req,res)=>{
-
-    const newUser =req.body.user;
-
-    User.create({
-        name:newUser.name,
-        email:newUser.email
-      })
-      .then(user =>{
-          res.json(user);
-      })
-      .catch(error =>{
-          console.log(error);
-          res.status(404).send(error);
-      })
-})
-
-
 
 //syncing and authenticate sequel
 connection
