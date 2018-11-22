@@ -112,6 +112,28 @@ app.get('/singlepost',(req,res)=>{
  })
 
 
+
+ app.get('/getUserProjects',(req,res)=>{
+   
+    User.findAll({
+        attributes:['name'],
+        include:[{
+           model:Project, as:'Tasks',
+           attributes:['title']
+        }]
+    })
+    .then( output =>{
+     res.json(output);
+    })
+  .catch(error =>{
+     console.log(error);
+     res.status(404).send(error);
+   })
+ 
+ })
+
+
+
 Post.belongsTo(User, {as:'UserRef', foreignKey: 'userId' }); //puts foreignKey UserId in Post table
 
 Post.hasMany(Comment,{as:'All_Comments' }); //foreignKey =PostId in comment table
