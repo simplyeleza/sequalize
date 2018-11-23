@@ -8,9 +8,6 @@ const _USERS =require('./users.json');
 const app = express();
 const port=8001;
 
-
-
-
 //creating a connection with sequelize
 const connection = new Sequelize('db','user','pass',{
 host:'localhost',
@@ -34,8 +31,6 @@ password: {
         isAlphanumeric:true
     }
 }
-
-
 })
 
 //creating the Post model
